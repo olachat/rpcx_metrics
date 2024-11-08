@@ -3,7 +3,7 @@ module github.com/olachat/rpcx_metrics
 go 1.23.1
 
 require (
-	github.com/gogf/gf v1.16.9
+	github.com/gogf/gf v1.15.4
 	github.com/hashicorp/consul/api v1.30.0
 	github.com/prometheus/client_golang v1.20.5
 )
@@ -17,7 +17,7 @@ require (
 	github.com/fatih/color v1.16.0 // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
-	github.com/gomodule/redigo v1.8.5 // indirect
+	github.com/gomodule/redigo v2.0.0+incompatible // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/grokify/html-strip-tags-go v0.0.1 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
@@ -32,7 +32,7 @@ require (
 	github.com/kr/text v0.2.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
-	github.com/mattn/go-runewidth v0.0.9 // indirect
+	github.com/mattn/go-runewidth v0.0.10 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
@@ -40,8 +40,8 @@ require (
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.55.0 // indirect
 	github.com/prometheus/procfs v0.15.1 // indirect
-	go.opentelemetry.io/otel v1.0.0 // indirect
-	go.opentelemetry.io/otel/trace v1.0.0 // indirect
+	github.com/rivo/uniseg v0.1.0 // indirect
+	go.opentelemetry.io/otel v0.16.0 // indirect
 	golang.org/x/exp v0.0.0-20230817173708-d852ddb80c63 // indirect
 	golang.org/x/net v0.26.0 // indirect
 	golang.org/x/sys v0.22.0 // indirect
