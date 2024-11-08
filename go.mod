@@ -1,6 +1,6 @@
 module github.com/olachat/rpcx_metrics
 
-go 1.23.1
+go 1.18
 
 require (
 	github.com/gogf/gf v1.15.4
