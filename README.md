@@ -1,6 +1,7 @@
 # rpc_metrics
 
-rpc_metrics 自动采集 rpcx 服务的请求指标，支持服务发现（Consul），支持 Prometheus + Grafana 监控告警集成。
+## 背景
+RPC 服务缺乏基于服务的监控，对服务的QPS、错误率、响应时间等一无所知 ，也不方便排查问题，rpc_metrics应运而生， 可以自动采集 rpcx 服务的请求指标，支持服务发现（Consul），支持 Prometheus + Grafana 监控告警集成，易于集成，易于使用。
 
 
 ## 快速开始
