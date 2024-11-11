@@ -1,4 +1,4 @@
-package prom
+package tool
 
 import (
 	"errors"
@@ -35,7 +35,7 @@ func (*ip) LocalIPv4s() (ips []string, err error) {
 	return ips, nil
 }
 
-// LocalIPv4s 获取本机局域网ipv4地址
+// LocalIPv4 获取本机局域网ipv4地址
 func (*ip) LocalIPv4() (string, error) {
 	addrs, err := net.InterfaceAddrs()
 	if err != nil {

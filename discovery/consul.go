@@ -1,26 +1,26 @@
-package prom
+package discovery
 
 import (
 	"fmt"
-	"log"
 
 	consulapi "github.com/hashicorp/consul/api"
+	"github.com/olachat/rpcx_metrics/tool"
+	"github.com/smallnest/rpcx/log"
 )
 
 // ConsulDiscovery consul服务发现
 type ConsulDiscovery struct {
-	serviceName string   // 服务名称
-	Ipv4        string   // 注册IP
-	Port        int      // 注册端口
-	consulAddr  []string // consul地址
-	// consulPath  string   // consulPath
-	healthCheckUseTcp bool // 健康检查是否使用tcp
+	serviceName       string   // 服务名称
+	Ipv4              string   // 注册IP
+	Port              int      // 注册端口
+	consulAddr        []string // consul地址
+	healthCheckUseTcp bool     // 健康检查是否使用tcp
 	closed            bool
 }
 
 // NewConsulDiscovery 创建consul服务发现
-func NewConsulDiscovery(serviceName string, port int, consulAddr []string, healthCheckUseTcp ...bool) *ConsulDiscovery {
-	ipv4s, err := IP.LocalIPv4s()
+func NewConsulDiscovery(consulAddr string, serviceName string, port int, healthCheckUseTcp ...bool) *ConsulDiscovery {
+	ipv4s, err := tool.IP.LocalIPv4s()
 	if err != nil {
 		panic(err)
 	}
@@ -29,7 +29,7 @@ func NewConsulDiscovery(serviceName string, port int, consulAddr []string, healt
 		serviceName:       serviceName,
 		Ipv4:              ipv4s[0],
 		Port:              port,
-		consulAddr:        consulAddr,
+		consulAddr:        []string{consulAddr},
 		healthCheckUseTcp: len(healthCheckUseTcp) > 0 && healthCheckUseTcp[0],
 		closed:            false,
 	}
@@ -50,6 +50,7 @@ func (c *ConsulDiscovery) getID() string {
 
 // Register 执行注册逻辑
 func (c *ConsulDiscovery) Register(tags []string, meta map[string]string) error {
+	log.Infof("consul discover register service: %s", c.serviceName)
 	client, err := c.getClient()
 	if err != nil {
 		return err
@@ -90,15 +91,15 @@ func (c *ConsulDiscovery) Register(tags []string, meta map[string]string) error 
 
 // Deregister 解除注册
 func (c *ConsulDiscovery) Deregister() error {
+	log.Infof("consul discover deregister service: %s", c.serviceName)
 	if !c.closed {
-		log.Printf("consul unregister")
 		client, err := c.getClient()
 		if err != nil {
-			log.Println("consul getClient error", err)
+			log.Errorf("consul discover get client err: %+v", err)
 			return err
 		}
 		if err = client.Agent().ServiceDeregister(c.getID()); err == nil {
-			log.Println("nginx close from", c.getID())
+			log.Warnf("nginx close from: %+v", c.getID())
 		}
 		c.closed = true
 	}
