@@ -8,7 +8,7 @@ rpc_metrics 自动采集 rpcx 服务的请求指标，支持服务发现（Consu
 ### 安装 
 
 ```aiignore
-go install github.com/olachat/rpcx_metrics@v0.1.8
+go install github.com/olachat/rpcx_metrics@v1.0.0
 ```
 
 ### 使用
@@ -18,7 +18,7 @@ go install github.com/olachat/rpcx_metrics@v0.1.8
 ```
 下面添加：
 ```aiignore
-  rpcServer.Plugins.Add(prom.NewPrometheusPlugin())
+   rpcServer.Plugins.Add(prom.NewPrometheusPlugin())
 ```
 编译重启所有RPC服务
 
