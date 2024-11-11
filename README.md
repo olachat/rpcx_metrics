@@ -48,6 +48,7 @@ scrape_configs:
         separator: ;
         target_label: service_name
 ```
+点击重启
 配置完成，打开服务发现->Targets，可以看到所有的rpc服务都出现了，如下界面
 ![Prometheus](prometheus/1.jpg)
 
