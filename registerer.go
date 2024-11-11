@@ -2,10 +2,8 @@ package prom
 
 import (
 	"net/http"
-	"strconv"
 	"time"
 
-	"github.com/gogf/gf/net/ghttp"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
@@ -27,25 +25,25 @@ func (o *Registerer) GetMetricAPIHandler() (h http.Handler) {
 	return
 }
 
-var reqStartTimestampKey = new(int)
+//var reqStartTimestampKey = new(int)
 
-func (o *Registerer) Middleware() ghttp.HandlerFunc {
-	return func(r *ghttp.Request) {
-		// before request
-		path := r.URL.Path
-		o.requestsReceived.WithLabelValues(path).Inc()
-		r.SetCtxVar(reqStartTimestampKey, time.Now().UnixMicro())
-
-		r.Middleware.Next()
-
-		//after request
-		o.responsesSent.WithLabelValues(path, strconv.Itoa(r.Response.Status)).Inc()
-		start := r.GetCtxVar(reqStartTimestampKey, 0).Int64()
-		if start > 0 {
-			o.rpcDurations.WithLabelValues(path, strconv.Itoa(r.Response.Status)).Observe(float64(time.Now().UnixMicro()-start) / 1_000_000)
-		}
-	}
-}
+//func (o *Registerer) Middleware() ghttp.HandlerFunc {
+//	return func(r *ghttp.Request) {
+//		// before request
+//		path := r.URL.Path
+//		o.requestsReceived.WithLabelValues(path).Inc()
+//		r.SetCtxVar(reqStartTimestampKey, time.Now().UnixMicro())
+//
+//		r.Middleware.Next()
+//
+//		//after request
+//		o.responsesSent.WithLabelValues(path, strconv.Itoa(r.Response.Status)).Inc()
+//		start := r.GetCtxVar(reqStartTimestampKey, 0).Int64()
+//		if start > 0 {
+//			o.rpcDurations.WithLabelValues(path, strconv.Itoa(r.Response.Status)).Observe(float64(time.Now().UnixMicro()-start) / 1_000_000)
+//		}
+//	}
+//}
 
 func (o *Registerer) TrackRequestReceived(method string) {
 	o.requestsReceived.WithLabelValues(method).Inc()

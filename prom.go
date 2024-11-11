@@ -4,19 +4,18 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 	"net/http"
 	"sync"
 	"time"
-
-	"github.com/gogf/gf/frame/g"
 )
 
 // Start prometheus服务启动
-func Start(ctx context.Context, serviceName string, wg *sync.WaitGroup) {
+func Start(ctx context.Context, serviceName string, consulAddr []string, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	availablePort := GetAvailablePort()
-	g.Log().Debugf("serviceName: %+v prometheus port: %+v start", serviceName, availablePort)
+	log.Printf("serviceName: %+v prometheus port: %+v start", serviceName, availablePort)
 
 	http.Handle("/metric", DefaultRegisterer().GetMetricAPIHandler())
 	// 增加健康检测
@@ -28,7 +27,7 @@ func Start(ctx context.Context, serviceName string, wg *sync.WaitGroup) {
 	srv := &http.Server{
 		Addr: fmt.Sprintf(":%d", availablePort),
 	}
-	consulDiscovery := NewConsulDiscovery("go_rpc_exporter", availablePort)
+	consulDiscovery := NewConsulDiscovery("go_rpc_exporter", availablePort, consulAddr)
 
 	go func() {
 		// 向consul进行注册
@@ -50,7 +49,7 @@ func Start(ctx context.Context, serviceName string, wg *sync.WaitGroup) {
 	_ = consulDiscovery.Deregister()
 
 	if err := srv.Shutdown(shutdownCtx); err != nil {
-		g.Log().Warningf("prometheus Shutdown failed err: %+v", err)
+		log.Printf("prometheus Shutdown failed err: %+v", err)
 	}
-	g.Log().Info("prometheus shutdown finished")
+	log.Printf("prometheus shutdown finished")
 }

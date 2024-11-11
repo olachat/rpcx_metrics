@@ -2,11 +2,10 @@ package prom
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"runtime/debug"
 	"time"
-
-	"github.com/gogf/gf/os/glog"
 )
 
 // TrackHandler monitor an event handler or business go method like an HTTP Request Handler, and protect it
@@ -24,19 +23,19 @@ func (o *Registerer) TrackHandler(err *error, methodName string) (onCompleted fu
 		if p := recover(); p != nil {
 
 			statusCode = CustomHTTPCodePanic
-			glog.Errorf("TrackHandler: Panic in %s: %#v: stack:\n%s\n", methodName, p, string(debug.Stack()))
+			log.Printf("TrackHandler: Panic in %s: %#v: stack:\n%s\n", methodName, p, string(debug.Stack()))
 
 		} else if *err == nil {
 			statusCode = http.StatusOK
 		} else if invalidParam, ok := (*err).(*ErrorInvalidParam); ok {
 
 			statusCode = http.StatusBadRequest
-			glog.Errorf("TrackHandler: %s: InvalidArgument err: %v", methodName, invalidParam)
+			log.Printf("TrackHandler: %s: InvalidArgument err: %v", methodName, invalidParam)
 
 		} else {
 
 			statusCode = http.StatusInternalServerError
-			glog.Errorf("TrackHandler: %s: internal err: %v", methodName, *err)
+			log.Printf("TrackHandler: %s: internal err: %v", methodName, *err)
 
 		}
 

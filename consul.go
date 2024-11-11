@@ -2,8 +2,8 @@ package prom
 
 import (
 	"fmt"
+	"log"
 
-	"github.com/gogf/gf/frame/g"
 	consulapi "github.com/hashicorp/consul/api"
 )
 
@@ -19,7 +19,7 @@ type ConsulDiscovery struct {
 }
 
 // NewConsulDiscovery 创建consul服务发现
-func NewConsulDiscovery(serviceName string, port int, healthCheckUseTcp ...bool) *ConsulDiscovery {
+func NewConsulDiscovery(serviceName string, port int, consulAddr []string, healthCheckUseTcp ...bool) *ConsulDiscovery {
 	ipv4s, err := IP.LocalIPv4s()
 	if err != nil {
 		panic(err)
@@ -29,7 +29,7 @@ func NewConsulDiscovery(serviceName string, port int, healthCheckUseTcp ...bool)
 		serviceName:       serviceName,
 		Ipv4:              ipv4s[0],
 		Port:              port,
-		consulAddr:        g.Cfg().GetStrings("rpc.discover.Addr"),
+		consulAddr:        consulAddr,
 		healthCheckUseTcp: len(healthCheckUseTcp) > 0 && healthCheckUseTcp[0],
 		closed:            false,
 	}
@@ -91,14 +91,14 @@ func (c *ConsulDiscovery) Register(tags []string, meta map[string]string) error 
 // Deregister 解除注册
 func (c *ConsulDiscovery) Deregister() error {
 	if !c.closed {
-		g.Log().Infof("consul unregister")
+		log.Printf("consul unregister")
 		client, err := c.getClient()
 		if err != nil {
-			g.Log().Println("consul getClient error", err)
+			log.Println("consul getClient error", err)
 			return err
 		}
 		if err = client.Agent().ServiceDeregister(c.getID()); err == nil {
-			g.Log().Println("nginx close from", c.getID())
+			log.Println("nginx close from", c.getID())
 		}
 		c.closed = true
 	}
