@@ -75,7 +75,7 @@ func (h *PrometheusHandler) Register(name string, _ interface{}, metadata string
 	availablePort := tool.GetAvailablePort()
 	log.Printf("serviceName: %+v prometheus port: %+v start", name, availablePort)
 
-	h.consulDiscover = discovery.NewConsulDiscovery(h.consulAddr, name, availablePort)
+	h.consulDiscover = discovery.NewConsulDiscovery(h.consulAddr, "go_rpc_exporter", availablePort)
 
 	http.Handle("/metric", DefaultRegisterer().GetMetricAPIHandler())
 	// 增加健康检测
