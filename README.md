@@ -64,5 +64,6 @@ scrape_configs:
 - 成功/失败 响应时间
 
 ![监控面板1](dashboard/1.jpg)
-- Golang基础指标监控
-![监控面板2](dashboard/2.jpg)
+
+可以按照自己的需要新增告警规则
+![监控面板1](grafana/alert.jpg)
