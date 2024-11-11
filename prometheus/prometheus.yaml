@@ -1,0 +1,20 @@
+global:
+scrape_interval: 15s
+evaluation_interval: 15s
+scrape_configs:
+  - job_name: go_rpc
+    honor_timestamps: false
+    honor_labels: false
+    scheme: http
+    metrics_path: metric
+    consul_sd_configs:
+      - server: 10.32.216.243:8500
+        services:
+          - go_rpc_exporter
+    relabel_configs:
+      - regex: (.*)
+        action: replace
+        source_labels:
+          - __meta_consul_service_metadata_service_name
+        separator: ;
+        target_label: service_name
